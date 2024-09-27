@@ -21,7 +21,7 @@ class KyivstarApi
 
     private AuthenticationService $authentication;
 
-    public function __construct(array $config = [])
+    public function __construct($config)
     {
         $this->version = $config['version'];
         $this->server = $config['server'];
