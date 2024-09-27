@@ -1,0 +1,4 @@
+CREDENTIALS
+composer.lock
+/vendor
+/.idea
