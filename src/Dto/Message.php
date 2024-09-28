@@ -4,7 +4,6 @@ namespace Kyivstar\Api\Dto;
 
 use Kyivstar\Api\Traits\ObjectToArray;
 use Kyivstar\Api\Traits\ValueValidator;
-use Kyivstar\Api\Exceptions\ValueException;
 
 abstract class Message
 {
@@ -20,7 +19,6 @@ abstract class Message
      * @param string $from
      * @param string $to
      * @param string $text
-     * @throws ValueException
      */
     public function __construct(string $from,
                                 string $to,

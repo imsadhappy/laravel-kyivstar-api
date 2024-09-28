@@ -5,14 +5,14 @@ namespace Kyivstar\Api;
 use Kyivstar\Api\Services\AuthenticationService;
 use Kyivstar\Api\Services\SmsService;
 use Kyivstar\Api\Services\ViberService;
-use Kyivstar\Api\Traits\ValueValidator;
+use Kyivstar\Api\Traits\ConfigValidator;
 
 /**
  * Class KyivstarApi.
  */
 class KyivstarApi
 {
-    use ValueValidator;
+    use ConfigValidator;
 
     private string $server;
 
@@ -24,7 +24,6 @@ class KyivstarApi
 
     /**
      * @param array $config
-     * @throws ValueException|ConfigException|AuthenticationException
      */
     public function __construct(array $config)
     {
@@ -38,7 +37,6 @@ class KyivstarApi
     /**
      * @param string|null $alphaName
      * @return SmsService
-     * @throws ValueException
      */
     public function Sms(?string $alphaName = null): SmsService
     {
@@ -51,7 +49,6 @@ class KyivstarApi
     /**
      * @param string|null $alphaName
      * @return ViberService
-     * @throws ValueException
      */
     public function Viber(?string $alphaName = null): ViberService
     {

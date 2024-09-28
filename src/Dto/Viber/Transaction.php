@@ -3,7 +3,6 @@
 namespace Kyivstar\Api\Dto\Viber;
 
 use Kyivstar\Api\Dto\Message;
-use Kyivstar\Api\Exceptions\ValueException;
 
 class Transaction extends Message
 {
@@ -14,7 +13,6 @@ class Transaction extends Message
      * @param string $to
      * @param string $text
      * @param int|null $messageTtlSec
-     * @throws ValueException
      */
     public function __construct(string $from,
                                 string $to,

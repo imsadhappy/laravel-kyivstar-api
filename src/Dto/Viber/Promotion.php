@@ -2,8 +2,6 @@
 
 namespace Kyivstar\Api\Dto\Viber;
 
-use Kyivstar\Api\Exceptions\ValueException;
-
 class Promotion extends Transaction
 {
     public int $messageTtlSec;
@@ -18,7 +16,6 @@ class Promotion extends Transaction
      * @param string|null $img
      * @param string|null $caption
      * @param string|null $action
-     * @throws ValueException
      */
     public function __construct(string  $from,
                                 string  $to,

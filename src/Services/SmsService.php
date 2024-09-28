@@ -5,8 +5,7 @@ namespace Kyivstar\Api\Services;
 use Kyivstar\Api\Dto\Sms;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
-use Kyivstar\Api\Exceptions\ValueException;
-use Illuminate\Http\Client\RequestException;
+use Kyivstar\Api\Services\AuthenticationService;
 
 class SmsService extends JsonHttpService
 {
@@ -17,7 +16,6 @@ class SmsService extends JsonHttpService
      * @param string $version
      * @param AuthenticationService $authentication
      * @param string $alphaName
-     * @throws ValueException
      */
     public function __construct(string                $server,
                                 string                $version,
@@ -35,7 +33,6 @@ class SmsService extends JsonHttpService
      * @param string $to
      * @param string $text
      * @return string
-     * @throws RequestException|ValueException
      */
     public function send(string $to, string $text): string
     {
@@ -47,7 +44,6 @@ class SmsService extends JsonHttpService
     /**
      * @param string $msgId
      * @return string
-     * @throws RequestException|ValueException
      */
     public function status(string $msgId): string
     {

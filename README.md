@@ -6,6 +6,11 @@ https://api-gateway.kyivstar.ua/#overview
 
 ## Changelog
 
+#### Version 0.0.4
+- new traits: HttpValidator (for JsonHttpService & AuthenticationService) & ConfigValidator
+- moved isValidConfig from ValueValidator to ConfigValidator
+- removed excessive use declarations 
+
 #### Version 0.0.3
 - added traits: ObjectToArray (for Message & Viber/ContentExtended DTOs)
 - minor refactoring

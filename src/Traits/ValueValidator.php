@@ -2,7 +2,6 @@
 
 namespace Kyivstar\Api\Traits;
 
-use Kyivstar\Api\Exceptions\ConfigException;
 use Kyivstar\Api\Exceptions\ValueIsEmptyException;
 use Kyivstar\Api\Exceptions\ValueNotUrlException;
 use Kyivstar\Api\Exceptions\ValueTooLongException;
@@ -95,30 +94,5 @@ trait ValueValidator
         }
 
         throw new ValueIsNotAllowedException($value, $allowedOptions, get_called_class());
-    }
-
-    /**
-     * @param array|null $config
-     * @return array
-     * @throws ConfigException|ValueIsNotAllowedException
-     */
-    protected function isValidConfig(?array $config = null)
-    {
-        if (empty($config)) {
-            throw new ConfigException('empty array');
-        }
-
-        foreach (['version','server','alpha_name','client_id','client_secret'] as $key) {
-            if (!isset($config[$key])) {
-                throw new ConfigException("$key not set");
-            }
-            if (empty($config[$key])) {
-                throw new ConfigException("$key empty");
-            } 
-        }
-
-        $this->isOneOf($config['server'], ['mock','sandbox','production']);
-
-        return $config;
     }
 }

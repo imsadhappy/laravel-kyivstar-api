@@ -4,7 +4,6 @@ namespace Kyivstar\Api\Dto\Viber;
 
 use Kyivstar\Api\Traits\ObjectToArray;
 use Kyivstar\Api\Traits\ValueValidator;
-use Kyivstar\Api\Exceptions\ValueException;
 
 class ContentExtended
 {
@@ -20,7 +19,6 @@ class ContentExtended
      * @param string $img
      * @param string|null $caption
      * @param string|null $action
-     * @throws ValueException
      */
     public function __construct(string  $img,
                                 ?string $caption = null,

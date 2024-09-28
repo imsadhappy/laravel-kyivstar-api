@@ -6,8 +6,7 @@ use Kyivstar\Api\Dto\Viber\Promotion;
 use Kyivstar\Api\Dto\Viber\Transaction;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
-use Kyivstar\Api\Exceptions\ValueException;
-use Illuminate\Http\Client\RequestException;
+use Kyivstar\Api\Services\AuthenticationService;
 
 class ViberService extends JsonHttpService
 {
@@ -18,7 +17,6 @@ class ViberService extends JsonHttpService
      * @param string $version
      * @param AuthenticationService $authentication
      * @param string $alphaName
-     * @throws ValueException
      */
     public function __construct(string                $server,
                                 string                $version,
@@ -36,7 +34,6 @@ class ViberService extends JsonHttpService
      * @param string $to
      * @param string $text
      * @return string
-     * @throws RequestException|ValueException
      */
     public function transaction(string $to, string $text): string
     {
@@ -49,7 +46,6 @@ class ViberService extends JsonHttpService
      * @param string $to
      * @param string $text
      * @return string
-     * @throws RequestException|ValueException
      */
     public function promotion(string $to, string $text): string
     {
@@ -61,7 +57,6 @@ class ViberService extends JsonHttpService
     /**
      * @param string $msgId
      * @return string
-     * @throws RequestException|ValueException
      */
     public function status(string $msgId): string
     {

@@ -2,8 +2,6 @@
 
 namespace Kyivstar\Api\Dto;
 
-use Kyivstar\Api\Exceptions\ValueException;
-
 class Sms extends Message
 {
     public int $maxSegments;
@@ -16,7 +14,6 @@ class Sms extends Message
      * @param string $text
      * @param int|null $maxSegments
      * @param int|null $messageTtlSec
-     * @throws ValueException
      */
     public function __construct(string $from,
                                 string $to,

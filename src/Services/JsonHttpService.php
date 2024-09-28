@@ -2,13 +2,15 @@
 
 namespace Kyivstar\Api\Services;
 
+use Kyivstar\Api\Traits\HttpValidator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Http\Client\RequestException;
 
 abstract class JsonHttpService
 {
+    use HttpValidator;
+
     protected string $url;
 
     private $authentication;
@@ -37,21 +39,15 @@ abstract class JsonHttpService
      * @param string|null $endpoint
      * @param array|null $payload
      * @return Response
-     * @throws RequestException
      */
     protected function try(string $method, ?string $endpoint = '', array $payload = null): Response
     {
-        /** @var Response $response */
         $response = $this->request->{$method}($this->url . $endpoint, $payload);
 
-        if ($response->status() === 401) {
+        if ($response->status() === 401) { //one more try with forceRefresh of accessToken
             $response = $this->setupRequest(true)->{$method}($this->url . $endpoint, $payload);
         }
 
-        if ($response->status() === 200) {
-            return $response;
-        }
-
-        throw $response->toException();
+        return $this->is200($response, fn() => $response);
     }
 }
