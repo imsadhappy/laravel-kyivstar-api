@@ -6,6 +6,9 @@ https://api-gateway.kyivstar.ua/#overview
 
 ## Changelog
 
+#### Version 0.1.0
+- alpha release
+
 #### Version 0.0.4
 - new traits: HttpValidator (for JsonHttpService & AuthenticationService) & ConfigValidator
 - moved isValidConfig from ValueValidator to ConfigValidator
