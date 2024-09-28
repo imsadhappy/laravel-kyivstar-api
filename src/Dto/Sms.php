@@ -6,6 +6,10 @@ use Kyivstar\Api\Exceptions\ValueException;
 
 class Sms extends Message
 {
+    public int $maxSegments;
+
+    public int $messageTtlSec;
+    
     /**
      * @param string $from
      * @param string $to
@@ -27,11 +31,11 @@ class Sms extends Message
         }
 
         if (!is_null($maxSegments)) {
-            $this->props['maxSegments'] = $this->between($maxSegments, 1, 6);
+            $this->maxSegments = $this->between($maxSegments, 1, 6);
         }
 
         if (!is_null($messageTtlSec)) {
-            $this->props['messageTtlSec'] = $this->between($messageTtlSec, 0, 86400);
+            $this->messageTtlSec = $this->between($messageTtlSec, 0, 86400);
         }
     }
 }

@@ -6,6 +6,10 @@ use Kyivstar\Api\Exceptions\ValueException;
 
 class Promotion extends Transaction
 {
+    public int $messageTtlSec;
+
+    public ContentExtended $contentExtended;
+    
     /**
      * @param string $from
      * @param string $to
@@ -27,11 +31,11 @@ class Promotion extends Transaction
         parent::__construct($from, $to, $text);
 
         if (!is_null($messageTtlSec)) {
-            $this->props['messageTtlSec'] = $this->between($messageTtlSec, 30, 1209600);
+            $this->messageTtlSec = $this->between($messageTtlSec, 30, 1209600);
         }
 
         if (!is_null($img)) {
-            $this->props['contentExtended'] = new ContentExtended($img, $caption, $action);
+            $this->contentExtended = new ContentExtended($img, $caption, $action);
         }
     }
 }

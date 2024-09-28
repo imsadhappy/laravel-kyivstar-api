@@ -7,6 +7,8 @@ use Kyivstar\Api\Exceptions\ValueException;
 
 class Transaction extends Message
 {
+    public int $messageTtlSec;
+    
     /**
      * @param string $from
      * @param string $to
@@ -22,7 +24,7 @@ class Transaction extends Message
         parent::__construct($from, $to, $text);
 
         if (!is_null($messageTtlSec)) {
-            $this->props['messageTtlSec'] = $this->between($messageTtlSec, 30, 1209600);
+            $this->messageTtlSec = $this->between($messageTtlSec, 30, 1209600);
         }
     }
 }

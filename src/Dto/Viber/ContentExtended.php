@@ -2,13 +2,18 @@
 
 namespace Kyivstar\Api\Dto\Viber;
 
-use Kyivstar\Api\Exceptions\ValueException;
-use Kyivstar\Api\Traits\PropsIterator;
 use Kyivstar\Api\Traits\ValueValidator;
+use Kyivstar\Api\Exceptions\ValueException;
 
-class ContentExtended implements \Iterator
+class ContentExtended
 {
-    use ValueValidator, PropsIterator;
+    use ValueValidator;
+
+    public string $img;
+
+    public string $caption;
+
+    public string $action;
 
     /**
      * @param string $img
@@ -20,14 +25,14 @@ class ContentExtended implements \Iterator
                                 ?string $caption = null,
                                 ?string $action = null)
     {
-        $this->props = ['img' => $this->isUrl($img)];
+        $this->img = $this->isUrl($img);
 
         if (!empty($caption)) {
-            $this->props['caption'] = $caption;
+            $this->caption = $caption;
         }
 
         if (!is_null($action)) {
-            $this->props['action'] = $this->isUrl($action);
+            $this->action = $this->isUrl($action);
         }
     }
 }

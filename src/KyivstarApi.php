@@ -6,12 +6,14 @@ use Kyivstar\Api\Services\AuthenticationService;
 use Kyivstar\Api\Services\SmsService;
 use Kyivstar\Api\Services\ViberService;
 use Kyivstar\Api\Exceptions\ValueException;
+use Kyivstar\Api\Traits\ValueValidator;
 
 /**
  * Class KyivstarApi.
  */
 class KyivstarApi
 {
+    use ValueValidator;
 
     private string $server;
 
@@ -21,8 +23,9 @@ class KyivstarApi
 
     private AuthenticationService $authentication;
 
-    public function __construct($config)
+    public function __construct(array $config)
     {
+        $this->isValidConfig($config);
         $this->version = $config['version'];
         $this->server = $config['server'];
         $this->alphaName = $config['alpha_name'];
@@ -39,7 +42,7 @@ class KyivstarApi
         return new SmsService($this->server,
                               $this->version,
                               $this->authentication,
-                    $alphaName ?? $this->alphaName);
+                              $alphaName ?? $this->alphaName);
     }
 
     /**
@@ -52,7 +55,7 @@ class KyivstarApi
         return new ViberService($this->server,
                                 $this->version,
                                 $this->authentication,
-                       $alphaName ?? $this->alphaName);
+                                $alphaName ?? $this->alphaName);
     }
 
     public function getServer(): string

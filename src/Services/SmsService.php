@@ -3,12 +3,12 @@
 namespace Kyivstar\Api\Services;
 
 use Kyivstar\Api\Dto\Sms;
-use Kyivstar\Api\Exceptions\ValueException;
-use Illuminate\Http\Client\RequestException;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
+use Kyivstar\Api\Exceptions\ValueException;
+use Illuminate\Http\Client\RequestException;
 
-class SmsService extends HttpService
+class SmsService extends JsonHttpService
 {
     use ValueValidator, HasAlphaName;
 
@@ -41,7 +41,7 @@ class SmsService extends HttpService
     {
         $sms = new Sms($this->alphaName, $to, $text);
 
-        return $this->try('post', '', $sms)->json('msgId');
+        return $this->try('post', '', $sms->toArray())->json('msgId');
     }
 
     /**

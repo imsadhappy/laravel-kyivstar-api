@@ -2,34 +2,30 @@
 
 namespace Kyivstar\Api\Services;
 
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
 
-abstract class HttpService
+abstract class JsonHttpService
 {
     protected string $url;
 
     private $authentication;
 
-    private array $headers;
-
     private PendingRequest $request;
 
-    protected function __construct(callable $authentication,
-                                   array $headers = ['Accept' => 'application/json',
-                                                     'Content-Type' => 'application/json'])
+    protected function __construct(callable $authentication)
     {
         $this->authentication = $authentication;
-        $this->headers = $headers;
 
         $this->setupRequest();
     }
 
     private function setupRequest(bool $forceRefresh = false): PendingRequest
     {
-        $this->request = Http::withHeaders($this->headers)->withToken(($this->authentication)($forceRefresh));
+        list($type, $token) = ($this->authentication)($forceRefresh);
+        $this->request = Http::withToken($token, ucfirst($type))->asJson();
 
         return $this->request;
     }
@@ -39,16 +35,16 @@ abstract class HttpService
      *
      * @param string $method
      * @param string|null $endpoint
-     * @param iterable|null $payload
+     * @param array|null $payload
      * @return Response
      * @throws RequestException
      */
-    protected function try(string $method, ?string $endpoint = '', ?iterable $payload = []): Response
+    protected function try(string $method, ?string $endpoint = '', array $payload = null): Response
     {
         /** @var Response $response */
         $response = $this->request->{$method}($this->url . $endpoint, $payload);
 
-        if ($response->status() === 401){
+        if ($response->status() === 401) {
             $response = $this->setupRequest(true)->{$method}($this->url . $endpoint, $payload);
         }
 

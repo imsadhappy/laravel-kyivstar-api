@@ -2,14 +2,14 @@
 
 namespace Kyivstar\Api\Services;
 
-use Illuminate\Http\Client\RequestException;
 use Kyivstar\Api\Dto\Viber\Promotion;
 use Kyivstar\Api\Dto\Viber\Transaction;
-use Kyivstar\Api\Exceptions\ValueException;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
+use Kyivstar\Api\Exceptions\ValueException;
+use Illuminate\Http\Client\RequestException;
 
-class ViberService extends HttpService
+class ViberService extends JsonHttpService
 {
     use ValueValidator, HasAlphaName;
 
@@ -42,7 +42,7 @@ class ViberService extends HttpService
     {
         $transaction = new Transaction($this->alphaName, $to, $text);
 
-        return $this->try('post', '/transaction', $transaction)->json('msgId');
+        return $this->try('post', '/transaction', $transaction->toArray())->json('msgId');
     }
 
     /**
@@ -55,7 +55,7 @@ class ViberService extends HttpService
     {
         $promotion = new Promotion($this->alphaName, $to, $text);
 
-        return $this->try('post', '/promotion', $promotion)->json('msgId');
+        return $this->try('post', '/promotion', $promotion->toArray())->json('msgId');
     }
 
     /**

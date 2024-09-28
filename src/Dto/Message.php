@@ -2,13 +2,18 @@
 
 namespace Kyivstar\Api\Dto;
 
-use Kyivstar\Api\Traits\PropsIterator;
 use Kyivstar\Api\Traits\ValueValidator;
 use Kyivstar\Api\Exceptions\ValueException;
 
-abstract class Message implements \Iterator
+abstract class Message
 {
-    use ValueValidator, PropsIterator;
+    use ValueValidator;
+
+    public string $to;
+
+    public string $from;
+    
+    public string $text;
 
     /**
      * @param string $from
@@ -20,10 +25,13 @@ abstract class Message implements \Iterator
                                 string $to,
                                 string $text)
     {
-        $this->props = [
-            'to' => $this->minLength($to, 9),
-            'from' => $this->notEmpty($from),
-            'text' => $this->notEmpty($text)
-        ];
+        $this->to = $this->minLength($to, 9);
+        $this->from = $this->notEmpty($from);
+        $this->text = $this->notEmpty($text);
+    }
+
+    public function toArray()
+    {
+        return get_object_vars($this);
     }
 }
