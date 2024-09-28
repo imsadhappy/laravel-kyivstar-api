@@ -5,7 +5,6 @@ namespace Kyivstar\Api;
 use Kyivstar\Api\Services\AuthenticationService;
 use Kyivstar\Api\Services\SmsService;
 use Kyivstar\Api\Services\ViberService;
-use Kyivstar\Api\Exceptions\ValueException;
 use Kyivstar\Api\Traits\ValueValidator;
 
 /**
@@ -23,6 +22,10 @@ class KyivstarApi
 
     private AuthenticationService $authentication;
 
+    /**
+     * @param array $config
+     * @throws ValueException|ConfigException|AuthenticationException
+     */
     public function __construct(array $config)
     {
         $this->isValidConfig($config);

@@ -6,6 +6,10 @@ https://api-gateway.kyivstar.ua/#overview
 
 ## Changelog
 
+#### Version 0.0.3
+- added traits: ObjectToArray (for Message & Viber/ContentExtended DTOs)
+- minor refactoring
+
 #### Version 0.0.2
 - AuthenticationService nolonger extends HttpService
 - DTOs props array removed in favor of direct properties

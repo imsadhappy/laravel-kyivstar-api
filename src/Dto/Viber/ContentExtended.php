@@ -2,12 +2,13 @@
 
 namespace Kyivstar\Api\Dto\Viber;
 
+use Kyivstar\Api\Traits\ObjectToArray;
 use Kyivstar\Api\Traits\ValueValidator;
 use Kyivstar\Api\Exceptions\ValueException;
 
 class ContentExtended
 {
-    use ValueValidator;
+    use ObjectToArray, ValueValidator;
 
     public string $img;
 

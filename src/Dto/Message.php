@@ -1,13 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Kyivstar\Api\Dto;
 
+use Kyivstar\Api\Traits\ObjectToArray;
 use Kyivstar\Api\Traits\ValueValidator;
 use Kyivstar\Api\Exceptions\ValueException;
 
 abstract class Message
 {
-    use ValueValidator;
+    use ObjectToArray, ValueValidator;
 
     public string $to;
 
@@ -28,10 +29,5 @@ abstract class Message
         $this->to = $this->minLength($to, 9);
         $this->from = $this->notEmpty($from);
         $this->text = $this->notEmpty($text);
-    }
-
-    public function toArray()
-    {
-        return get_object_vars($this);
     }
 }
