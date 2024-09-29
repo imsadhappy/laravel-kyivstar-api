@@ -2,3 +2,4 @@ CREDENTIALS
 composer.lock
 /vendor
 /.idea
+/.vscode

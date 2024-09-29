@@ -11,25 +11,40 @@ abstract class JsonHttpService
 {
     use HttpValidator;
 
+    protected string $baseUrl = 'https://api-gateway.kyivstar.ua/';
+
     protected string $url;
 
     private $authentication;
 
-    private PendingRequest $request;
-
-    protected function __construct(callable $authentication)
+    /**
+     * @param string $endpoint
+     * @param string $server
+     * @param string $version
+     * @param callable $authentication
+     */
+    protected function __construct(string $endpoint,
+                                   string $server,
+                                   string $version,
+                                   callable $authentication)
     {
+        $this->url = $this->baseUrl . ($server === 'production' ? '' : $server) . "/rest/$version/$endpoint";
         $this->authentication = $authentication;
-
-        $this->setupRequest();
     }
 
-    private function setupRequest(bool $forceRefresh = false): PendingRequest
+    protected function get(string $endpoint = '', $query = null): Response
     {
-        list($type, $token) = ($this->authentication)($forceRefresh);
-        $this->request = Http::withToken($token, ucfirst($type))->asJson();
+        return $this->request('GET', $endpoint, $query);
+    }
 
-        return $this->request;
+    protected function post(array $payload = [], ?string $endpoint = ''): Response
+    {
+        return $this->request('POST', $endpoint, $payload);
+    }
+
+    protected function put(array $payload = [], ?string $endpoint = ''): Response
+    {
+        return $this->request('PUT', $endpoint, $payload);
     }
 
     /**
@@ -40,12 +55,19 @@ abstract class JsonHttpService
      * @param array|null $payload
      * @return Response
      */
-    protected function try(string $method, ?string $endpoint = '', array $payload = null): Response
+    private function request(string $method, 
+                             ?string $endpoint = '', 
+                             ?array $payload = []): Response
     {
-        $response = $this->request->{$method}($this->url . $endpoint, $payload);
+        $request = function ($authentication, $forceRefresh = false) use ($method, $endpoint, $payload): Response {
+            list($tokenType, $token) = $authentication($forceRefresh);
+            return Http::withToken($token, ucfirst($tokenType))->asJson()->{$method}($this->url . $endpoint, $payload);
+        };
+
+        $response = $request($this->authentication);
 
         if ($response->status() === 401) { //one more try with forceRefresh of accessToken
-            $response = $this->setupRequest(true)->{$method}($this->url . $endpoint, $payload);
+            $response = $request($this->authentication, true);
         }
 
         return $this->is200($response, fn() => $response);

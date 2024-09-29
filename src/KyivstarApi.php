@@ -2,6 +2,7 @@
 
 namespace Kyivstar\Api;
 
+use Kyivstar\Api\Exceptions\ConfigException;
 use Kyivstar\Api\Services\AuthenticationService;
 use Kyivstar\Api\Services\SmsService;
 use Kyivstar\Api\Services\ViberService;
@@ -24,10 +25,12 @@ class KyivstarApi
 
     /**
      * @param array $config
+     * @throws ConfigException
      */
     public function __construct(array $config)
     {
         $this->isValidConfig($config);
+
         $this->version = $config['version'];
         $this->server = $config['server'];
         $this->alphaName = $config['alpha_name'];
@@ -42,8 +45,8 @@ class KyivstarApi
     {
         return new SmsService($this->server,
                               $this->version,
-                              $this->authentication,
-                              $alphaName ?? $this->alphaName);
+                              $alphaName ?? $this->alphaName,
+                              $this->authentication);
     }
 
     /**
@@ -54,8 +57,8 @@ class KyivstarApi
     {
         return new ViberService($this->server,
                                 $this->version,
-                                $this->authentication,
-                                $alphaName ?? $this->alphaName);
+                                $alphaName ?? $this->alphaName,
+                                $this->authentication);
     }
 
     public function getServer(): string

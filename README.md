@@ -6,6 +6,9 @@ https://api-gateway.kyivstar.ua/#overview
 
 ## Changelog
 
+#### Version 0.1.1
+- refactoring: exposed get|post|put in JsonHttpService instead of try
+
 #### Version 0.1.0
 - alpha release
 

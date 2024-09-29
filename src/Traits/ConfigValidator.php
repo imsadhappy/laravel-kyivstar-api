@@ -11,7 +11,7 @@ trait ConfigValidator {
      * @return array
      * @throws ConfigException
      */
-    protected function isValidConfig(?array $config = null)
+    protected function isValidConfig(?array $config = null): array
     {
         if (empty($config)) {
             throw new ConfigException('empty array');
