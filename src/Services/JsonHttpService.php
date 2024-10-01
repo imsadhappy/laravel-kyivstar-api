@@ -60,7 +60,9 @@ abstract class JsonHttpService
                              ?array $payload = []): Response
     {
         $request = function ($authentication, $forceRefresh = false) use ($method, $endpoint, $payload): Response {
+
             list($tokenType, $token) = $authentication($forceRefresh);
+
             return Http::withToken($token, ucfirst($tokenType))->asJson()->{$method}($this->url . $endpoint, $payload);
         };
 

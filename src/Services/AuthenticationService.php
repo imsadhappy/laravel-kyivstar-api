@@ -13,7 +13,15 @@ class AuthenticationService
 
     private ?PendingRequest $request;
 
+    private string $endpoint = 'https://api-gateway.kyivstar.ua/idp/oauth2/token';
+
+    private array $payload = ['grant_type' => 'client_credentials'];
+
+    private string $cacheKey = 'kyivstar-api-access-token';
+
     /**
+     * Constructs new authentication request
+     *
      * @param string $clientId
      * @param string $clientSecret
      */
@@ -23,26 +31,29 @@ class AuthenticationService
     }
 
     /**
+     * Gets accessToken from cache or
+     * performs constructed authentication request
+     *
      * @param bool $forceRefresh
      * @return array
      */
     public function __invoke(bool $forceRefresh = false): array
     {
-        $ckey = 'kyivstar-api-access-token';
-
         if (!$forceRefresh) {
-            $accessToken = Cache::get($ckey);
-            if (!empty($accessToken)) {
-                return explode(' : ', $accessToken);
+
+            $token = Cache::get($this->cacheKey);
+
+            if (!empty($token)) {
+                return explode(' : ', $token);
             }
         }
-
-        $response = $this->request->post('https://api-gateway.kyivstar.ua/idp/oauth2/token', 
-                                         ['grant_type' => 'client_credentials']);
         
-        return $this->is200($response, function($response) use ($ckey) {
+        return $this->is200($this->request->post($this->endpoint, $this->payload), function ($response): array {
+
             $token = [$response->json('token_type'), $response->json('access_token')];
-            Cache::put($ckey, join(' : ', $token), 60 * 60 * 7);
+
+            Cache::put($this->cacheKey, join(' : ', $token), 60 * 60 * 7);
+
             return $token;
         });
     }
