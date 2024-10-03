@@ -23,11 +23,11 @@ class Sms extends Message
     {
         parent::__construct($from, $to, $text);
 
-        if (is_null($maxSegments) && strlen($text) > 70) {
-            $maxSegments = ceil(strlen($text) / 70);
+        if (strlen($text) > 70) {
+            $maxSegments = (int) ceil(strlen($text) / 70);
         }
 
-        if (!is_null($maxSegments)) {
+        if (!empty($maxSegments)) {
             $this->maxSegments = $this->between($maxSegments, 1, 6);
         }
 

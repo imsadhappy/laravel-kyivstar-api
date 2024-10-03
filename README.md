@@ -1,10 +1,35 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 # Laravel пакет для роботи з Київстар Open Telecom API
 
+Робота з SMS:
+
+```php
+/** 
+ * Відправити SMS
+ * 
+ * @param string $to - номер отримувача
+ * @param string $text - повідомлення
+ * @returns string $msgId - ідентифікатор відправленого SMS 
+ */
+app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text')
+
+/** 
+ * Перевірити статус відправки SMS
+ * 
+ * @param string $msgId - ідентифікатор відправленого SMS 
+ * @returns string $status - accepted|delivered|seen
+ */
+app(KyivstarApi::class)->Sms()->status($msgId);
+```
+
 ## Офіційна документація:
 https://api-gateway.kyivstar.ua/#overview
 
 ## Changelog
+
+#### Version 0.1.3
+- added unit tests (for DTOs & traits): ConfigValidatorTest, HasAlphaNameTest, HttpValidatorTest, ObjectToArrayTest, ValueValidatorTest, SmsTest, ViberPromotionTest
+- added supportedVersions list & exception codes to ConfigValidator trait
 
 #### Version 0.1.2
 - refactoring: AuthenticationService

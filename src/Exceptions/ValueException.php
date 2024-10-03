@@ -4,7 +4,7 @@ namespace Kyivstar\Api\Exceptions;
 
 class ValueException extends \Exception
 {
-    public function __construct(string $message, string $value, string $in)
+    public function __construct(string $message, ?string $value, string $in)
     {
         $value = htmlentities($value);
         

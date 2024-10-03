@@ -28,7 +28,7 @@ trait ValueValidator
      */
     protected function isUrl($value)
     {
-        if ($this->notEmpty($value) && filter_var($value, FILTER_VALIDATE_URL)) {
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }
 
@@ -43,7 +43,7 @@ trait ValueValidator
      */
     protected function minLength($value, int $condition): string
     {
-        if (!is_null($value) && strlen($value) >= $condition) {
+        if (strlen($value) >= $condition) {
             return $value;
         }
 
@@ -58,7 +58,7 @@ trait ValueValidator
      */
     protected function maxLength($value, int $condition): string
     {
-        if (!is_null($value) && strlen($value) <= $condition) {
+        if (strlen($value) <= $condition) {
             return $value;
         }
 
@@ -74,7 +74,7 @@ trait ValueValidator
      */
     protected function between($value, $min, $max)
     {
-        if (!is_null($value) && $value >= (float) $min && $value <= (float) $max) {
+        if ($value >= $min && $value <= $max) {
             return $value;
         }
 

@@ -4,7 +4,7 @@ namespace Kyivstar\Api\Traits;
 
 trait ObjectToArray
 {
-    public function toArray()
+    public function toArray(): array
     {
         $props = get_object_vars($this);
 

@@ -72,6 +72,6 @@ abstract class JsonHttpService
             $response = $request($this->authentication, true);
         }
 
-        return $this->is200($response, fn() => $response);
+        return $this->is200($response);
     }
 }

@@ -1,5 +1,6 @@
 CREDENTIALS
 composer.lock
+.phpunit.result.cache
 /vendor
 /.idea
 /.vscode

@@ -16,10 +16,10 @@ trait HasAlphaName
     /**
      * Set alpha-name on runtime, overriding config|.env values
      *
-     * @param string $alphaName
+     * @param string|null $alphaName
      * @return self
      */
-    public function setAlphaName(string $alphaName): self
+    public function setAlphaName(?string $alphaName): self
     {
         $this->alphaName = $this->notEmpty($alphaName);
 

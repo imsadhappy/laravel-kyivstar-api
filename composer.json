@@ -20,10 +20,20 @@
     "guzzlehttp/guzzle": "^7.0",
     "ext-json": "*"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0|^10.5",
+    "mockery/mockery": "^1.4.4",
+    "orchestra/testbench": "^8.0|^9.0"
+  },
   "autoload": {
     "psr-4": {
       "Kyivstar\\Api\\": "src",
       "Kyivstar\\Api\\Exceptions\\": "src/Exceptions"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kyivstar\\Api\\Tests\\": "tests/"
     }
   },
   "config": {
