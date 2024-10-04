@@ -5,6 +5,7 @@ namespace Kyivstar\Api\Traits;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\RequestException;
 use Kyivstar\Api\Exceptions\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 trait HttpValidator {
@@ -21,7 +22,9 @@ trait HttpValidator {
             case 200:
                 return is_callable($callback) ? $callback($response) : $response;
             case 401:
-                throw new AuthenticationException($response->json('error_verbose')); 
+                throw new AuthenticationException($response->json('error_verbose'));
+            case 404:
+                throw new NotFoundHttpException($response->json('errorMsg'));
             case 422:
                 throw new UnprocessableEntityHttpException($response->json('errorMsg'));
             default:

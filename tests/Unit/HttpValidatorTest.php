@@ -6,13 +6,14 @@ use Kyivstar\Api\Tests\TestCase;
 use Kyivstar\Api\Traits\HttpValidator;
 use Illuminate\Support\Facades\Http;
 use Kyivstar\Api\Exceptions\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class HttpValidatorTest extends TestCase
 {
     private $mock;
 
-    private string $validResponse;
+    private string $responseText = 'not important';
 
 
     protected function setUp(): void
@@ -23,21 +24,20 @@ class HttpValidatorTest extends TestCase
             use HttpValidator;
         };
 
-        $this->validResponse = fake()->sentence();
-
         Http::fake([
-            'https://site200.com' => Http::response($this->validResponse, 200),
-            'https://site401.com' => Http::response(['error_verbose' => fake()->sentence()],401),
-            'https://site422.com' => Http::response(['errorMsg' => fake()->sentence()],422),
+            'https://site200.com' => Http::response($this->responseText, 200),
+            'https://site401.com' => Http::response(['error_verbose' => $this->responseText],401),
+            'https://site404.com' => Http::response(['errorMsg' => $this->responseText],404),
+            'https://site422.com' => Http::response(['errorMsg' => $this->responseText],422),
         ]);
     }
 
     public function testHttp200()
     {
-        $responseBody = $this->mock->is200(Http::get('https://site200.com'),
+        $responseText = $this->mock->is200(Http::get('https://site200.com'),
                                            fn($response) => $response->getBody()->getContents());
 
-        $this->assertEquals($this->validResponse, $responseBody);
+        $this->assertEquals($this->responseText, $responseText);
     }
 
     public function testHttp401()
@@ -45,6 +45,13 @@ class HttpValidatorTest extends TestCase
         $this->expectException(AuthenticationException::class);
 
         $this->mock->is200(Http::get('https://site401.com'));
+    }
+
+    public function testHttp404()
+    {
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->mock->is200(Http::get('https://site404.com'));
     }
 
     public function testHttp422()

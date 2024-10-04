@@ -27,6 +27,9 @@ https://api-gateway.kyivstar.ua/#overview
 
 ## Changelog
 
+#### Version 0.1.4
+- added 404 NotFoundHttpException to HttpValidator and respective test (+ minor refactoring of test)
+
 #### Version 0.1.3
 - added unit tests (for DTOs & traits): ConfigValidatorTest, HasAlphaNameTest, HttpValidatorTest, ObjectToArrayTest, ValueValidatorTest, SmsTest, ViberPromotionTest
 - added supportedVersions list & exception codes to ConfigValidator trait
