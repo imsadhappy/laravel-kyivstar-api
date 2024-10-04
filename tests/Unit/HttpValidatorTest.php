@@ -13,28 +13,31 @@ class HttpValidatorTest extends TestCase
 {
     private $mock;
 
-    private string $responseText = 'not important';
+    private string $url;
 
+    private string $responseText;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->url = fake()->url();
+        $this->responseText = fake()->text();
         $this->mock = new class {
             use HttpValidator;
         };
 
         Http::fake([
-            'https://site200.com' => Http::response($this->responseText, 200),
-            'https://site401.com' => Http::response(['error_verbose' => $this->responseText],401),
-            'https://site404.com' => Http::response(['errorMsg' => $this->responseText],404),
-            'https://site422.com' => Http::response(['errorMsg' => $this->responseText],422),
+            "{$this->url}/200" => Http::response($this->responseText, 200),
+            "{$this->url}/401" => Http::response(['error_verbose' => $this->responseText],401),
+            "{$this->url}/404" => Http::response(['errorMsg' => $this->responseText],404),
+            "{$this->url}/422" => Http::response(['errorMsg' => $this->responseText],422),
         ]);
     }
 
     public function testHttp200()
     {
-        $responseText = $this->mock->is200(Http::get('https://site200.com'),
+        $responseText = $this->mock->is200(Http::get("{$this->url}/200"),
                                            fn($response) => $response->getBody()->getContents());
 
         $this->assertEquals($this->responseText, $responseText);
@@ -44,20 +47,20 @@ class HttpValidatorTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->mock->is200(Http::get('https://site401.com'));
+        $this->mock->is200(Http::get("{$this->url}/401"));
     }
 
     public function testHttp404()
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $this->mock->is200(Http::get('https://site404.com'));
+        $this->mock->is200(Http::get("{$this->url}/404"));
     }
 
     public function testHttp422()
     {
         $this->expectException(UnprocessableEntityHttpException::class);
 
-        $this->mock->is200(Http::get('https://site422.com'));
+        $this->mock->is200(Http::get("{$this->url}/422"));
     }
 }

@@ -7,13 +7,7 @@ use Kyivstar\Api\Exceptions\ConfigException;
 
 class ConfigValidatorTest extends TestCase
 {
-    private function getRandomConfigParam(?string $withValue = null): array
-    {
-        $config = config()->get($this->configKey);
-        $key = array_keys($config)[rand(0, count($config)-1)];
-
-        return [$key => is_null($withValue) ? $config[$key] : $withValue];
-    }
+    private array $configArgs = ['version', 'server', 'alpha_name', 'client_id', 'client_secret'];
 
     private function expectConfigException(int $code = 0): self
     {
@@ -26,13 +20,13 @@ class ConfigValidatorTest extends TestCase
     public function testConfigParamMissing()
     {
         $this->expectConfigException(ConfigException::MISSING_CONFIG)
-                ->newApiInstance([], $this->getRandomConfigParam());
+                ->newApiInstance([], [fake()->randomElement($this->configArgs)]);
     }
 
     public function testConfigEmptyValue()
     {
         $this->expectConfigException(ConfigException::EMPTY_VALUE)
-                ->newApiInstance($this->getRandomConfigParam(''));
+                ->newApiInstance([fake()->randomElement($this->configArgs) => '']);
     }
 
     public function testConfigInvalidVersion()

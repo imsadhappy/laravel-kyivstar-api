@@ -1,7 +1,22 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/imsadhappy/laravel-kyivstar-api.svg?style=flat-square)](https://packagist.org/packages/imsadhappy/laravel-kyivstar-api)
+[![Total Downloads](https://img.shields.io/packagist/dt/imsadhappy/laravel-kyivstar-api.svg?style=flat-square)](https://packagist.org/packages/imsadhappy/laravel-kyivstar-api)
 # Laravel пакет для роботи з Київстар Open Telecom API
 
-Робота з SMS:
+## Офіційна документація:
+https://api-gateway.kyivstar.ua/#overview
+
+## Конфіг .env:
+
+```ini
+KYIVSTAR_API_CLIENT_ID="*Ваш Client ID"
+KYIVSTAR_API_CLIENT_SECRET="*Ваш Client Secret"
+KYIVSTAR_API_VERSION="Необов'язково, буде використана остання доступна"
+KYIVSTAR_API_SERVER="Необов'язково, mock, sandbox, або production"
+KYIVSTAR_API_ALPHA_NAME="Необов'язково, можна передати параметром в сервіс"
+```
+
+## Робота з SMS:
 
 ```php
 /** 
@@ -11,7 +26,7 @@
  * @param string $text - повідомлення
  * @returns string $msgId - ідентифікатор відправленого SMS 
  */
-app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text')
+app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text');
 
 /** 
  * Перевірити статус відправки SMS
@@ -22,10 +37,12 @@ app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text')
 app(KyivstarApi::class)->Sms()->status($msgId);
 ```
 
-## Офіційна документація:
-https://api-gateway.kyivstar.ua/#overview
-
 ## Changelog
+
+#### Version 0.1.5
+- added feature tests: AuthenticationServiceTest
+- refactoring: TestCase, ConfigValidatorTest, HasAlphaNameTest, HttpValidatorTest
+- made JsonHttpService & AuthenticationService future-proof in case of endpoint changes
 
 #### Version 0.1.4
 - added 404 NotFoundHttpException to HttpValidator and respective test (+ minor refactoring of test)

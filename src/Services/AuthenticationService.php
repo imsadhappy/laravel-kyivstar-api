@@ -13,9 +13,9 @@ class AuthenticationService
 
     private ?PendingRequest $request;
 
-    private string $endpoint = 'https://api-gateway.kyivstar.ua/idp/oauth2/token';
+    private string $url;
 
-    private array $payload = ['grant_type' => 'client_credentials'];
+    private array $payload;
 
     private string $cacheKey = 'kyivstar-api-access-token';
 
@@ -27,6 +27,13 @@ class AuthenticationService
      */
     function __construct(string $clientId, string $clientSecret)
     {
+        /**
+         * Maybe in other versions (not v1beta)
+         * other endpoint URL or different payload will be used.
+         * So we can add switch (config()->get("kyivstar-api.version")) here later.
+         */
+        $this->url = 'https://api-gateway.kyivstar.ua/idp/oauth2/token';
+        $this->payload = ['grant_type' => 'client_credentials'];
         $this->request = Http::withBasicAuth($clientId, $clientSecret)->asForm();
     }
 
@@ -48,7 +55,7 @@ class AuthenticationService
             }
         }
         
-        return $this->is200($this->request->post($this->endpoint, $this->payload), function ($response): array {
+        return $this->is200($this->request->post($this->url, $this->payload), function ($response): array {
 
             $token = [$response->json('token_type'), $response->json('access_token')];
 

@@ -5,30 +5,33 @@ namespace Kyivstar\Api\Services;
 use Kyivstar\Api\Traits\HttpValidator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
-use Illuminate\Http\Client\PendingRequest;
 
 abstract class JsonHttpService
 {
     use HttpValidator;
-
-    protected string $baseUrl = 'https://api-gateway.kyivstar.ua/';
 
     protected string $url;
 
     private $authentication;
 
     /**
-     * @param string $endpoint
+     * @param string $base
      * @param string $server
      * @param string $version
      * @param callable $authentication
      */
-    protected function __construct(string $endpoint,
+    protected function __construct(string $base,
                                    string $server,
                                    string $version,
                                    callable $authentication)
     {
-        $this->url = $this->baseUrl . ($server === 'production' ? '' : $server) . "/rest/$version/$endpoint";
+        /**
+         * Maybe in other versions (not v1beta)
+         * other endpoint URLs will be used.
+         * So we can add switch (config()->get("kyivstar-api.version")) here later.
+         */
+        $server = $server === 'production' ? '/' : "/$server/";
+        $this->url = "https://api-gateway.kyivstar.ua{$server}rest/{$version}/{$base}";
         $this->authentication = $authentication;
     }
 

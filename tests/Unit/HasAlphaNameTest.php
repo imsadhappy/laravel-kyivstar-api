@@ -2,33 +2,34 @@
 
 namespace Kyivstar\Api\Tests\Unit;
 
+use Kyivstar\Api\KyivstarApi;
 use Kyivstar\Api\Tests\TestCase;
 use Kyivstar\Api\Exceptions\ValueIsEmptyException;
 
 class HasAlphaNameTest extends TestCase
 {
-    public function testGetAlphaName()
-    {
-        $alphaName = $this->newApiInstance()->getAlphaName();
+    private KyivstarApi $mock;
 
-        $this->assertIsString($alphaName);
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mock = $this->newApiInstance();
     }
 
-    public function testSetAlphaName()
+    public function testAlphaName()
     {
-        $alphaName = fake()->word();
+        $smsAlphaName = fake()->word();
+        $viberAlphaName = fake()->word();
 
-        $sms = $this->newApiInstance()->Sms()->setAlphaName($alphaName);
-        $viber = $this->newApiInstance()->Viber()->setAlphaName($alphaName);
+        $this->assertIsString($this->mock->getAlphaName());
 
-        $this->assertEquals($alphaName, $sms->getAlphaName());
-        $this->assertEquals($alphaName, $viber->getAlphaName());
-    }
+        $this->assertEquals($smsAlphaName, $this->mock->Sms($smsAlphaName)->getAlphaName());
 
-    public function testEmptyAlphaName()
-    {
+        $this->assertEquals($viberAlphaName, $this->mock->Viber($viberAlphaName)->getAlphaName());
+
         $this->expectException(ValueIsEmptyException::class);
 
-        $this->newApiInstance()->Sms()->setAlphaName('');
+        $this->mock->Sms()->setAlphaName('');
     }
 }
