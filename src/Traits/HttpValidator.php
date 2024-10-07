@@ -22,11 +22,11 @@ trait HttpValidator {
             case 200:
                 return is_callable($callback) ? $callback($response) : $response;
             case 401:
-                throw new AuthenticationException($response->json('error_verbose'));
+                throw new AuthenticationException($response->json('error.message') ?? 'Unauthorized');
             case 404:
-                throw new NotFoundHttpException($response->json('errorMsg'));
+                throw new NotFoundHttpException($response->json('errorMsg') ?? 'Not Found');
             case 422:
-                throw new UnprocessableEntityHttpException($response->json('errorMsg'));
+                throw new UnprocessableEntityHttpException($response->json('errorMsg') ?? 'Unprocessable Entity');
             default:
                 throw $response->toException();
         }

@@ -16,6 +16,7 @@ class ValueValidatorTest extends TestCase
         $this->mock = new class {
             use ValueValidator;
 
+            // exposing otherwise private methods
             public function expose($method, ...$values)
             {
                 return $this->{$method}(...$values);
@@ -32,7 +33,6 @@ class ValueValidatorTest extends TestCase
         $this->assertEquals($value, $this->mock->expose('notEmpty', $value));
 
         $this->expectException(ValueIsEmptyException::class);
-
         $this->mock->expose('notEmpty', fake()->randomElement([null, '', false, 0]));
     }
 
@@ -44,14 +44,12 @@ class ValueValidatorTest extends TestCase
         $value = fake()->imageUrl();
         $this->assertEquals($value, $this->mock->expose('isUrl', $value));
 
-        $this->expectException(ValueNotUrlException::class);
-
         $fakes = [fake()->word(),
                   fake()->boolean(),
                   fake()->sentence(),
                   fake()->numberBetween(0, 10),
                   null];
-
+        $this->expectException(ValueNotUrlException::class);
         $this->mock->expose('isUrl', fake()->randomElement($fakes));
     }
 

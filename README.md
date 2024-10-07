@@ -12,7 +12,7 @@ https://api-gateway.kyivstar.ua/#overview
 KYIVSTAR_API_CLIENT_ID="*Ваш Client ID"
 KYIVSTAR_API_CLIENT_SECRET="*Ваш Client Secret"
 KYIVSTAR_API_VERSION="Необов'язково, буде використана остання доступна"
-KYIVSTAR_API_SERVER="Необов'язково, mock, sandbox, або production"
+KYIVSTAR_API_SERVER="mock (default), sandbox, або production"
 KYIVSTAR_API_ALPHA_NAME="Необов'язково, можна передати параметром в сервіс"
 ```
 
@@ -38,6 +38,14 @@ app(KyivstarApi::class)->Sms()->status($msgId);
 ```
 
 ## Changelog
+
+#### Version 0.1.6
+- added SEGMENT_SIZE & MAX_SEGMENT_COUNT to Sms DTO.
+- added TTL to AuthenticationService
+- fix: ViberService response receives 'mid' not 'msgId' param
+- moved SmsTest & ViberPromotionTest to feature
+- made AuthenticationServiceTest version-agnostic (v1beta)
+- added feature tests: SmsServiceTest & ViberServiceTest (v1beta)
 
 #### Version 0.1.5
 - added feature tests: AuthenticationServiceTest

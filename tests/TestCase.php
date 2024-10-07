@@ -7,11 +7,25 @@ use Kyivstar\Api\KyivstarApiServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+    private string $server = 'mock';
+
     private array $config;
 
     protected function setUp(): void
     {
         parent::setUp();
+    }
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+            KyivstarApiServiceProvider::class,
+        ];
+    }
+
+    protected function getApiVersion(): string
+    {
+        return $this->config['version'];
     }
 
     protected function getEnvironmentSetUp($app)
@@ -20,13 +34,13 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             $config = $app['config']->get('kyivstar-api');
         } catch (\Exception $e) {
             $config = [
-                'version' => 'v1beta',
+                'version' => 'v1beta', //latest version
                 'alpha_name' => fake()->word()
             ];
         }
 
         $this->config = array_merge($config, [
-            'server' => 'mock', //server should always be mock
+            'server' => $this->server,
             'client_id' => 'foo', //not important
             'client_secret' => 'bar', //as long as not empty
         ]);
@@ -34,11 +48,12 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('kyivstar-api', $this->config);
     }
 
-    protected function getPackageProviders($app): array
+    protected function buildApiEndpoint(string $endpoint = ''): string
     {
-        return [
-            KyivstarApiServiceProvider::class,
-        ];
+        /**
+         * Maybe in other versions url will change - we'll switch it here
+         */
+        return "https://api-gateway.kyivstar.ua/{$this->server}/rest/{$this->getApiVersion()}/$endpoint";
     }
 
     /**
@@ -59,10 +74,5 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         }
 
         return new KyivstarApi($config);
-    }
-
-    protected function getApiVersion(): string
-    {
-        return $this->config['version'];
     }
 }

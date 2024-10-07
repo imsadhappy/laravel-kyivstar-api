@@ -39,29 +39,38 @@ class ViberService extends JsonHttpService
     {
         $transaction = new Transaction($this->alphaName, $to, $text);
 
-        return $this->post($transaction->toArray(), '/transaction')->json('msgId');
+        return $this->post($transaction->toArray(), '/transaction')->json('mid');
     }
 
     /**
      * @param string $to
      * @param string $text
+     * @param int|null $messageTtlSec
+     * @param string|null $img
+     * @param string|null $caption
+     * @param string|null $action
      * @return string
      */
-    public function promotion(string $to, string $text): string
+    public function promotion(string $to,
+                              string $text,
+                              ?int $messageTtlSec = null,
+                              ?string $img = null,
+                              ?string $caption = null,
+                              ?string $action = null): string
     {
-        $promotion = new Promotion($this->alphaName, $to, $text);
+        $promotion = new Promotion($this->alphaName, $to, $text, $messageTtlSec, $img, $caption, $action);
 
-        return $this->post($promotion->toArray(), '/promotion')->json('msgId');
+        return $this->post($promotion->toArray(), '/promotion')->json('mid');
     }
 
     /**
-     * @param string $msgId
+     * @param string $mid
      * @return string
      */
-    public function status(string $msgId): string
+    public function status(string $mid): string
     {
-        $msgId = $this->notEmpty($msgId);
+        $mid = $this->notEmpty($mid);
 
-        return $this->get("/status/$msgId")->json('status');
+        return $this->get("/status/$mid")->json('status');
     }
 }

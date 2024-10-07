@@ -17,19 +17,25 @@ class HasAlphaNameTest extends TestCase
         $this->mock = $this->newApiInstance();
     }
 
+    /**
+     * Check default from config
+     * and use different for services
+     */
     public function testAlphaName()
     {
         $smsAlphaName = fake()->word();
+        $smsService = $this->mock->Sms($smsAlphaName);
+
         $viberAlphaName = fake()->word();
+        $viberService = $this->mock->Viber($viberAlphaName);
 
-        $this->assertIsString($this->mock->getAlphaName());
+        $this->assertEquals($smsAlphaName, $smsService->getAlphaName());
+        $this->assertNotEquals($smsAlphaName, $this->mock->getAlphaName());
 
-        $this->assertEquals($smsAlphaName, $this->mock->Sms($smsAlphaName)->getAlphaName());
-
-        $this->assertEquals($viberAlphaName, $this->mock->Viber($viberAlphaName)->getAlphaName());
+        $this->assertEquals($viberAlphaName, $viberService->getAlphaName());
+        $this->assertNotEquals($viberAlphaName, $this->mock->getAlphaName());
 
         $this->expectException(ValueIsEmptyException::class);
-
         $this->mock->Sms()->setAlphaName('');
     }
 }
