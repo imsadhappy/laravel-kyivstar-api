@@ -2,24 +2,18 @@
 
 namespace Kyivstar\Api\Tests\Feature;
 
-use Kyivstar\Api\Tests\TestCase;
 use Illuminate\Support\Facades\Http;
+use Kyivstar\Api\Tests\VersionedTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class SmsServiceTest extends TestCase
+class SmsServiceTest extends VersionedTestCase
 {
     public function testSmsService()
     {
-        $version = $this->getApiVersion();
-
-        if ('v1beta' === $version) {
-            $this->runV1BetaTest();
-        } else {
-            $this->markTestSkipped(__CLASS__ . " for $version not found.");
-        }
+        $this->runVersionTest();
     }
 
-    private function runV1BetaTest()
+    protected function runV1BetaTest()
     {
         AuthenticationServiceTest::setupAuthenticationFacade();
 

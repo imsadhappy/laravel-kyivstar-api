@@ -2,25 +2,19 @@
 
 namespace Kyivstar\Api\Tests\Feature;
 
-use Kyivstar\Api\Tests\TestCase;
+use Kyivstar\Api\Tests\VersionedTestCase;
+use Kyivstar\Api\Services\AuthenticationService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
-use Kyivstar\Api\Services\AuthenticationService;
 
-class AuthenticationServiceTest extends TestCase
+class AuthenticationServiceTest extends VersionedTestCase
 {
     public function testAuthenticationService()
     {
-        $version = $this->getApiVersion();
-
-        if ('v1beta' === $version) {
-            $this->runV1BetaTest();
-        } else {
-            $this->markTestSkipped(__CLASS__ . " for $version not found.");
-        }
+        $this->runVersionTest();
     }
 
-    private function runV1BetaTest()
+    protected function runV1BetaTest()
     {
         $cacheKey = 'kyivstar-api-access-token';
         $payload = array_values(self::setupAuthenticationFacade());
@@ -30,8 +24,8 @@ class AuthenticationServiceTest extends TestCase
          */
         Cache::shouldReceive('get')->once()->with($cacheKey)->andReturnNull();
         Cache::shouldReceive('put')->once()->with($cacheKey,
-                    join(' : ', $payload),
-                    AuthenticationService::TTL);
+                                                join(' : ', $payload),
+                                                AuthenticationService::TTL);
 
         $request = new AuthenticationService('foo', 'bar');
 
@@ -47,16 +41,23 @@ class AuthenticationServiceTest extends TestCase
      */
     public static function setupAuthenticationFacade(string $version = 'v1beta'): array
     {
-        $url = 'https://api-gateway.kyivstar.ua/idp/oauth2/token';
-        $payload = [
-            'token_type' => fake()->word(),
-            'access_token' => fake()->password()
-        ];
+        if ('v1beta' === $version) {
 
-        Http::fake([
-            $url => Http::response($payload, 200)
-        ]);
+            $url = 'https://api-gateway.kyivstar.ua/idp/oauth2/token';
+            $payload = [
+                'token_type' => fake()->word(),
+                'access_token' => fake()->password()
+            ];
 
-        return $payload;
+            Http::fake([
+                $url => Http::response($payload, 200)
+            ]);
+
+            return $payload;
+
+        } else {
+
+            throw new \Exception("AuthenticationFacade for $version not implemented.");
+        }
     }
 }

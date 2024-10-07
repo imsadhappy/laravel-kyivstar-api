@@ -2,8 +2,8 @@
 
 namespace Kyivstar\Api\Tests\Feature;
 
-use Kyivstar\Api\Dto\Viber\Promotion;
 use Kyivstar\Api\Tests\TestCase;
+use Kyivstar\Api\Dto\Viber\Promotion;
 
 class ViberPromotionTest extends TestCase
 {

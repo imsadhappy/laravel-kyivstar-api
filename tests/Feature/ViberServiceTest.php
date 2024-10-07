@@ -2,24 +2,18 @@
 
 namespace Kyivstar\Api\Tests\Feature;
 
-use Kyivstar\Api\Tests\TestCase;
+use Kyivstar\Api\Tests\VersionedTestCase;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ViberServiceTest extends TestCase
+class ViberServiceTest extends VersionedTestCase
 {
     public function testViberService()
     {
-        $version = $this->getApiVersion();
-
-        if ('v1beta' === $version) {
-            $this->runV1BetaTest();
-        } else {
-            $this->markTestSkipped(__CLASS__ . " for $version not found.");
-        }
+        $this->runVersionTest();
     }
 
-    private function runV1BetaTest()
+    protected function runV1BetaTest()
     {
         AuthenticationServiceTest::setupAuthenticationFacade();
 

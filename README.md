@@ -39,12 +39,15 @@ app(KyivstarApi::class)->Sms()->status($msgId);
 
 ## Changelog
 
+#### Version 0.1.7
+- added VersionedTestCase for version-aware tests (now used in AuthenticationServiceTest, SmsServiceTest & ViberServiceTest)
+
 #### Version 0.1.6
 - added SEGMENT_SIZE & MAX_SEGMENT_COUNT to Sms DTO.
 - added TTL to AuthenticationService
 - fix: ViberService response receives 'mid' not 'msgId' param
 - moved SmsTest & ViberPromotionTest to feature
-- made AuthenticationServiceTest version-agnostic (v1beta)
+- made AuthenticationServiceTest version-aware (v1beta)
 - added feature tests: SmsServiceTest & ViberServiceTest (v1beta)
 
 #### Version 0.1.5
