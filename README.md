@@ -112,6 +112,9 @@ RequestException
 
 ## Changelog
 
+### Version 0.2.0
+- beta release - added tests
+
 #### Version 0.1.9
 - fix message (sms, transaction) segmentation
 
