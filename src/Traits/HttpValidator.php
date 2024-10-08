@@ -14,7 +14,7 @@ trait HttpValidator {
      * @param Response $response
      * @param callable|null $callback
      * @return mixed
-     * @throws AuthenticationException|UnprocessableEntityHttpException|RequestException
+     * @throws AuthenticationException|NotFoundHttpException|UnprocessableEntityHttpException|RequestException
      */
     public function is200(Response $response, ?callable $callback = null)
     {

@@ -13,10 +13,8 @@ class SmsServiceTest extends VersionedTestCase
         $this->runVersionTest();
     }
 
-    protected function runV1BetaTest()
+    protected function runV1BetaTest(array $authentication)
     {
-        AuthenticationServiceTest::setupAuthenticationFacade();
-
         $endpoint = $this->buildApiEndpoint('sms');
         $msgId = fake()->uuid();
         $status = fake()->randomElement(['accepted','delivered','viewed']);

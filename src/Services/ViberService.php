@@ -7,7 +7,7 @@ use Kyivstar\Api\Dto\Viber\Transaction;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
 
-class ViberService extends JsonHttpService
+final class ViberService extends JsonHttpService
 {
     use ValueValidator, HasAlphaName;
 
@@ -33,11 +33,12 @@ class ViberService extends JsonHttpService
     /**
      * @param string $to
      * @param string $text
-     * @return string
+     * @param int|null $messageTtlSec
+     * @return string - $mid message id
      */
-    public function transaction(string $to, string $text): string
+    public function transaction(string $to, string $text, ?int $messageTtlSec = null): string
     {
-        $transaction = new Transaction($this->alphaName, $to, $text);
+        $transaction = new Transaction($this->alphaName, $to, $text, $messageTtlSec);
 
         return $this->post($transaction->toArray(), '/transaction')->json('mid');
     }
@@ -49,7 +50,7 @@ class ViberService extends JsonHttpService
      * @param string|null $img
      * @param string|null $caption
      * @param string|null $action
-     * @return string
+     * @return string - $mid message id
      */
     public function promotion(string $to,
                               string $text,
@@ -64,8 +65,8 @@ class ViberService extends JsonHttpService
     }
 
     /**
-     * @param string $mid
-     * @return string
+     * @param string $mid message id
+     * @return string - status accepted|delivered|viewed
      */
     public function status(string $mid): string
     {

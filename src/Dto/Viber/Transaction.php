@@ -6,7 +6,7 @@ use Kyivstar\Api\Dto\Message;
 
 class Transaction extends Message
 {
-    public int $messageTtlSec;
+    const MAX_TTL = 1209600;
     
     /**
      * @param string $from
@@ -17,12 +17,8 @@ class Transaction extends Message
     public function __construct(string $from,
                                 string $to,
                                 string $text,
-                                ?int   $messageTtlSec = null)
+                                ?int   $messageTtlSec = 1209600)
     {
-        parent::__construct($from, $to, $text);
-
-        if (!is_null($messageTtlSec)) {
-            $this->messageTtlSec = $this->between($messageTtlSec, 30, 1209600);
-        }
+        parent::__construct($from, $to, $text, $this->between($messageTtlSec, 30, self::MAX_TTL));
     }
 }

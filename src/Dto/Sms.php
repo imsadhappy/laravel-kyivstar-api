@@ -4,13 +4,13 @@ namespace Kyivstar\Api\Dto;
 
 class Sms extends Message
 {
+    const MAX_TTL = 86400;
+
     const SEGMENT_SIZE = 70;
 
     const MAX_SEGMENT_COUNT = 6;
 
     public int $maxSegments;
-
-    public int $messageTtlSec;
     
     /**
      * @param string $from
@@ -23,9 +23,9 @@ class Sms extends Message
                                 string $to,
                                 string $text,
                                 ?int   $maxSegments = null,
-                                ?int   $messageTtlSec = null)
+                                ?int   $messageTtlSec = 86400)
     {
-        parent::__construct($from, $to, $text);
+        parent::__construct($from, $to, $text, $this->between($messageTtlSec, 0, self::MAX_TTL));
 
         if (strlen($text) > 70) {
             $maxSegments = (int) ceil(strlen($text) / self::SEGMENT_SIZE);
@@ -33,10 +33,6 @@ class Sms extends Message
 
         if (!empty($maxSegments)) {
             $this->maxSegments = $this->between($maxSegments, 1, self::MAX_SEGMENT_COUNT);
-        }
-
-        if (!is_null($messageTtlSec)) {
-            $this->messageTtlSec = $this->between($messageTtlSec, 0, 86400);
         }
     }
 }

@@ -15,6 +15,8 @@ abstract class Message
     
     public string $text;
 
+    public int $messageTtlSec;
+
     /**
      * @param string $from
      * @param string $to
@@ -22,10 +24,15 @@ abstract class Message
      */
     public function __construct(string $from,
                                 string $to,
-                                string $text)
+                                string $text,
+                                ?int   $messageTtlSec = null)
     {
         $this->to = $this->minLength($to, 9);
         $this->from = $this->notEmpty($from);
         $this->text = $this->notEmpty($text);
+
+        if (!is_null($messageTtlSec)) {
+            $this->messageTtlSec = $this->between($messageTtlSec, 0, self::MAX_TTL);
+        }
     }
 }

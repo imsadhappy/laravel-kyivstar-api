@@ -11,7 +11,7 @@ use Kyivstar\Api\Traits\ConfigValidator;
 /**
  * Class KyivstarApi.
  */
-class KyivstarApi
+final class KyivstarApi
 {
     use ConfigValidator;
 

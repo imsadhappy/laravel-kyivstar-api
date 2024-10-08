@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Client\PendingRequest;
 
-class AuthenticationService
+final class AuthenticationService
 {
     use HttpValidator;
 

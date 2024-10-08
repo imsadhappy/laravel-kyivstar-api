@@ -13,10 +13,8 @@ class ViberServiceTest extends VersionedTestCase
         $this->runVersionTest();
     }
 
-    protected function runV1BetaTest()
+    protected function runV1BetaTest(array $authentication)
     {
-        AuthenticationServiceTest::setupAuthenticationFacade();
-
         $endpoint = $this->buildApiEndpoint('viber');
         $transactionMid = fake()->uuid();
         $promotionMid = fake()->uuid();

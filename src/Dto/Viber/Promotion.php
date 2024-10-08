@@ -4,8 +4,6 @@ namespace Kyivstar\Api\Dto\Viber;
 
 class Promotion extends Transaction
 {
-    public int $messageTtlSec;
-
     public ContentExtended $contentExtended;
     
     /**
@@ -20,16 +18,12 @@ class Promotion extends Transaction
     public function __construct(string  $from,
                                 string  $to,
                                 string  $text,
-                                ?int    $messageTtlSec = null,
+                                ?int    $messageTtlSec = 1209600,
                                 ?string $img = null,
                                 ?string $caption = null,
                                 ?string $action = null)
     {
-        parent::__construct($from, $to, $text);
-
-        if (!is_null($messageTtlSec)) {
-            $this->messageTtlSec = $this->between($messageTtlSec, 30, 1209600);
-        }
+        parent::__construct($from, $to, $text, $messageTtlSec);
 
         if (!is_null($img)) {
             $this->contentExtended = new ContentExtended($img, $caption, $action);

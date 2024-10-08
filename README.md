@@ -11,8 +11,8 @@ https://api-gateway.kyivstar.ua/#overview
 ```ini
 KYIVSTAR_API_CLIENT_ID="*Ваш Client ID"
 KYIVSTAR_API_CLIENT_SECRET="*Ваш Client Secret"
-KYIVSTAR_API_VERSION="Необов'язково, буде використана остання доступна"
 KYIVSTAR_API_SERVER="mock (default), sandbox, або production"
+KYIVSTAR_API_VERSION="Необов'язково, буде використана остання доступна"
 KYIVSTAR_API_ALPHA_NAME="Необов'язково, можна передати параметром в сервіс"
 ```
 
@@ -27,7 +27,6 @@ KYIVSTAR_API_ALPHA_NAME="Необов'язково, можна передати 
  * @returns string $msgId - ідентифікатор відправленого SMS 
  */
 app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text');
-
 /** 
  * Перевірити статус відправки SMS
  * 
@@ -37,7 +36,87 @@ app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text');
 app(KyivstarApi::class)->Sms()->status($msgId);
 ```
 
+## Робота з Viber:
+
+```php
+/** 
+ * Відправити Viber повідомелння
+ * 
+ * @param string $to - номер отримувача
+ * @param string $text - повідомлення
+ * @returns string $mid - ідентифікатор відправленого Viber повідомелння 
+ */
+app(KyivstarApi::class)->Viber()->transaction('+380670000202', 'message text');
+
+/** 
+ * Відправити Viber повідомелння з картинкою (і кнопкою)
+ * 
+ * @param string $to - номер отримувача
+ * @param string $text - повідомлення
+ * @param int|null $messageTtlSec
+ * @param string|null $img - посилання на зображення
+ * @param string|null $caption - текст кнопки (необов'язково)
+ * @param string|null $action - посилання кнопки (необов'язково)
+ * @returns string $mid - ідентифікатор відправленого Viber повідомелння 
+ */
+app(KyivstarApi::class)->Viber()->promotion('+380670000202',
+                                            'message text',
+                                            null /* ttl, default 1209600 */,
+                                            'https://example.com/image.jpg',
+                                            'Click Me',
+                                            'https://example.com/');
+
+/** 
+ * Перевірити статус відправки Viber повідомелння
+ * 
+ * @param string $mid - ідентифікатор відправленого Viber повідомелння 
+ * @returns string $status - accepted|delivered|seen
+ */
+app(KyivstarApi::class)->Viber()->status($mid);
+```
+## Інше
+
+Alpha Name можна задати для всіх сервісів в .env або передавати в кожний сервіс окремо.
+
+```php
+app(KyivstarApi::class)->Sms('Foo');
+app(KyivstarApi::class)->Viber('Bar');
+```
+
+Виклик служб варто огортати в try ... catch блок. 
+Пакет може викликати Config..., Value... і Http помилки 
+(див. `src/Exceptions` і трейти типу `Validator` в `src/Traits`).
+
+```php
+try {
+    app(KyivstarApi::class)-> ...
+} catch (\Exception $e) {
+    ...
+}
+```
+Перелік деяких можливих помилок: 
+```
+ConfigException (with codes: 1-4)
+ValueException:
+    ValueIsEmptyException
+    ValueIsNotAllowedException
+    ValueNotBetweenException
+    ValueNotUrlException
+    ValueTooLongException
+    ValueTooShortException
+AuthenticationException
+NotFoundHttpException
+UnprocessableEntityHttpException
+RequestException
+```
+
 ## Changelog
+
+#### Version 0.1.8
+- updated readme
+- made api & services final
+- added MAX_TTL to Sms & Transaction DTOs
+- changed VersionedTestCase to set up authentication facade
 
 #### Version 0.1.7
 - added VersionedTestCase for version-aware tests (now used in AuthenticationServiceTest, SmsServiceTest & ViberServiceTest)
