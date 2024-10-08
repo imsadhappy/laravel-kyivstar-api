@@ -9,6 +9,10 @@ abstract class Message
 {
     use ObjectToArray, ValueValidator;
 
+    const MIN_TTL = 0;
+
+    const MAX_TTL = 86400;
+
     public string $to;
 
     public string $from;
@@ -21,6 +25,7 @@ abstract class Message
      * @param string $from
      * @param string $to
      * @param string $text
+     * @param int|null $messageTtlSec
      */
     public function __construct(string $from,
                                 string $to,
@@ -32,7 +37,7 @@ abstract class Message
         $this->text = $this->notEmpty($text);
 
         if (!is_null($messageTtlSec)) {
-            $this->messageTtlSec = $this->between($messageTtlSec, 0, self::MAX_TTL);
+            $this->messageTtlSec = $this->between($messageTtlSec, self::MIN_TTL, self::MAX_TTL);
         }
     }
 }

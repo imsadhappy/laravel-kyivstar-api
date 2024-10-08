@@ -112,6 +112,9 @@ RequestException
 
 ## Changelog
 
+#### Version 0.1.9
+- fix message (sms, transaction) segmentation
+
 #### Version 0.1.8
 - updated readme
 - made api & services final

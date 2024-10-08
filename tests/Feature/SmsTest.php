@@ -15,11 +15,13 @@ class SmsTest extends TestCase
             'to' => fake()->phoneNumber(),
             'text' => self::fakeText()
         ];
-
+        $expectedSegments = (int) ceil(strlen($payload['text']) / Sms::SEGMENT_SIZE);
         $sms = new Sms($payload['from'], $payload['to'], $payload['text']);
 
         // check expected segmentation
-        $payload['maxSegments'] = (int) ceil(strlen($payload['text']) / Sms::SEGMENT_SIZE);
+        if ($expectedSegments > 1) {
+            $payload['maxSegments'] = $expectedSegments;
+        }
 
         // also check toArray is implemented & used
         $this->assertEquals($payload, $sms->toArray());
@@ -31,15 +33,15 @@ class SmsTest extends TestCase
     public function testSmsTextTooLong()
     {
         $this->expectException(ValueNotBetweenException::class);
-        $max = Sms::SEGMENT_SIZE*Sms::MAX_SEGMENT_COUNT;
+        $charsOverflow = Sms::SEGMENT_SIZE * Sms::MAX_SEGMENT_COUNT + 1;
 
         new Sms(fake()->word(),
                 fake()->phoneNumber(),
-                fake()->realTextBetween($max+1, $max*2));
+                fake()->realTextBetween($charsOverflow, $charsOverflow*2));
     }
 
     public static function fakeText(): string
     {
-        return fake()->realTextBetween(10, Sms::SEGMENT_SIZE*Sms::MAX_SEGMENT_COUNT);
+        return fake()->realTextBetween(10, Sms::SEGMENT_SIZE * Sms::MAX_SEGMENT_COUNT);
     }
 }

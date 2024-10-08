@@ -18,7 +18,7 @@ class Promotion extends Transaction
     public function __construct(string  $from,
                                 string  $to,
                                 string  $text,
-                                ?int    $messageTtlSec = 1209600,
+                                ?int    $messageTtlSec = null,
                                 ?string $img = null,
                                 ?string $caption = null,
                                 ?string $action = null)
