@@ -20,10 +20,10 @@ class ViberPromotionTest extends TestCase
     public static function fakePromotion(): array
     {
         return [fake()->phoneNumber(),
-            fake()->sentence(),
-            null,
-            fake()->imageUrl(),
-            fake()->sentence(),
-            fake()->url()];
+                fake()->sentence(),
+                null,
+                fake()->imageUrl(),
+                fake()->sentence(),
+                fake()->url()];
     }
 }

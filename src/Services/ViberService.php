@@ -6,8 +6,9 @@ use Kyivstar\Api\Dto\Viber\Promotion;
 use Kyivstar\Api\Dto\Viber\Transaction;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
+use Kyivstar\Api\Interfaces\MessengerInterface;
 
-final class ViberService extends JsonHttpService
+final class ViberService extends JsonHttpService implements MessengerInterface
 {
     use ValueValidator, HasAlphaName;
 
@@ -30,12 +31,6 @@ final class ViberService extends JsonHttpService
                             $authentication);
     }
 
-    /**
-     * @param string $to
-     * @param string $text
-     * @param int|null $messageTtlSec
-     * @return string - $mid message id
-     */
     public function transaction(string $to, string $text, ?int $messageTtlSec = null): string
     {
         $transaction = new Transaction($this->alphaName, $to, $text, $messageTtlSec);
@@ -43,15 +38,6 @@ final class ViberService extends JsonHttpService
         return $this->post($transaction->toArray(), '/transaction')->json('mid');
     }
 
-    /**
-     * @param string $to
-     * @param string $text
-     * @param int|null $messageTtlSec
-     * @param string|null $img
-     * @param string|null $caption
-     * @param string|null $action
-     * @return string - $mid message id
-     */
     public function promotion(string $to,
                               string $text,
                               ?int $messageTtlSec = null,
@@ -64,14 +50,15 @@ final class ViberService extends JsonHttpService
         return $this->post($promotion->toArray(), '/promotion')->json('mid');
     }
 
-    /**
-     * @param string $mid message id
-     * @return string - status accepted|delivered|viewed
-     */
-    public function status(string $mid): string
+    public function status(string $id): string
     {
-        $mid = $this->notEmpty($mid);
+        $id = $this->notEmpty($id);
 
-        return $this->get("/status/$mid")->json('status');
+        return $this->get("/status/$id")->json('status');
+    }
+
+    public function send(string $to, string $text, ?int $messageTtlSec = null): string
+    {
+        return $this->transaction($to, $text, $messageTtlSec);
     }
 }

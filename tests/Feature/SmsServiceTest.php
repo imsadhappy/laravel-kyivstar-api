@@ -17,7 +17,7 @@ class SmsServiceTest extends VersionedTestCase
     {
         $endpoint = $this->buildApiEndpoint('sms');
         $msgId = fake()->uuid();
-        $status = fake()->randomElement(['accepted','delivered','viewed']);
+        $status = fake()->word();
 
         Http::fake([
             $endpoint => Http::response(['msgId' => $msgId], 200),

@@ -5,8 +5,9 @@ namespace Kyivstar\Api\Services;
 use Kyivstar\Api\Dto\Sms;
 use Kyivstar\Api\Traits\HasAlphaName;
 use Kyivstar\Api\Traits\ValueValidator;
+use Kyivstar\Api\Interfaces\MessengerInterface;
 
-final class SmsService extends JsonHttpService
+final class SmsService extends JsonHttpService implements MessengerInterface
 {
     use ValueValidator, HasAlphaName;
 
@@ -29,12 +30,6 @@ final class SmsService extends JsonHttpService
                             $authentication);
     }
 
-    /**
-     * @param string $to
-     * @param string $text
-     * @param int|null $messageTtlSec
-     * @return string
-     */
     public function send(string $to, string $text, ?int $messageTtlSec = null): string
     {
         $sms = new Sms($this->alphaName, $to, $text, $messageTtlSec);
@@ -42,14 +37,10 @@ final class SmsService extends JsonHttpService
         return $this->post($sms->toArray())->json('msgId');
     }
 
-    /**
-     * @param string $msgId
-     * @return string - status accepted|delivered|viewed
-     */
-    public function status(string $msgId): string
+    public function status(string $id): string
     {
-        $msgId = $this->notEmpty($msgId);
+        $id = $this->notEmpty($id);
 
-        return $this->get("/{$msgId}")->json('status');
+        return $this->get("/{$id}")->json('status');
     }
 }

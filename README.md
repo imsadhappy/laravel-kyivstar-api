@@ -24,16 +24,16 @@ KYIVSTAR_API_ALPHA_NAME="Необов'язково, можна передати 
  * 
  * @param string $to - номер отримувача
  * @param string $text - повідомлення
- * @returns string $msgId - ідентифікатор відправленого SMS 
+ * @returns string $id - ідентифікатор відправленого SMS 
  */
 app(KyivstarApi::class)->Sms()->send('+380670000202', 'message text');
 /** 
  * Перевірити статус відправки SMS
  * 
- * @param string $msgId - ідентифікатор відправленого SMS 
+ * @param string $id - ідентифікатор відправленого SMS 
  * @returns string $status - accepted|delivered|seen
  */
-app(KyivstarApi::class)->Sms()->status($msgId);
+app(KyivstarApi::class)->Sms()->status($id);
 ```
 
 ## Робота з Viber:
@@ -44,7 +44,7 @@ app(KyivstarApi::class)->Sms()->status($msgId);
  * 
  * @param string $to - номер отримувача
  * @param string $text - повідомлення
- * @returns string $mid - ідентифікатор відправленого Viber повідомелння 
+ * @returns string $id - ідентифікатор відправленого Viber повідомелння 
  */
 app(KyivstarApi::class)->Viber()->transaction('+380670000202', 'message text');
 
@@ -57,7 +57,7 @@ app(KyivstarApi::class)->Viber()->transaction('+380670000202', 'message text');
  * @param string|null $img - посилання на зображення
  * @param string|null $caption - текст кнопки (необов'язково)
  * @param string|null $action - посилання кнопки (необов'язково)
- * @returns string $mid - ідентифікатор відправленого Viber повідомелння 
+ * @returns string $id - ідентифікатор відправленого Viber повідомелння 
  */
 app(KyivstarApi::class)->Viber()->promotion('+380670000202',
                                             'message text',
@@ -69,10 +69,10 @@ app(KyivstarApi::class)->Viber()->promotion('+380670000202',
 /** 
  * Перевірити статус відправки Viber повідомелння
  * 
- * @param string $mid - ідентифікатор відправленого Viber повідомелння 
+ * @param string $id - ідентифікатор відправленого Viber повідомелння 
  * @returns string $status - accepted|delivered|seen
  */
-app(KyivstarApi::class)->Viber()->status($mid);
+app(KyivstarApi::class)->Viber()->status($id);
 ```
 ## Інше
 
@@ -83,8 +83,8 @@ app(KyivstarApi::class)->Sms('Foo');
 app(KyivstarApi::class)->Viber('Bar');
 ```
 
-Виклик служб варто огортати в try ... catch блок. 
-Пакет може викликати Config..., Value... і Http помилки 
+Виклик сервісів варто огортати в try ... catch блок. 
+Можливі Config..., Value... і Http помилки 
 (див. `src/Exceptions` і трейти типу `Validator` в `src/Traits`).
 
 ```php
@@ -111,6 +111,10 @@ RequestException
 ```
 
 ## Changelog
+
+### Version 0.2.1
+- added MessengerInterface implemented by SmsService & ViberService
+- minor tests refactoring
 
 ### Version 0.2.0
 - beta release - added tests

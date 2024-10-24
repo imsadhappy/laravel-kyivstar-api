@@ -18,8 +18,8 @@ class ViberServiceTest extends VersionedTestCase
         $endpoint = $this->buildApiEndpoint('viber');
         $transactionMid = fake()->uuid();
         $promotionMid = fake()->uuid();
-        $transactionStatus = fake()->randomElement(['accepted','delivered','viewed']);
-        $promotionStatus = fake()->randomElement(['accepted','delivered','viewed']);
+        $transactionStatus = fake()->word();
+        $promotionStatus = fake()->word();
 
         Http::fake([
             "$endpoint/transaction" => Http::response(['mid' => $transactionMid], 200),
