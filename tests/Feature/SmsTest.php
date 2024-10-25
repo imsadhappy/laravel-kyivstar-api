@@ -33,11 +33,11 @@ class SmsTest extends TestCase
     public function testSmsTextTooLong()
     {
         $this->expectException(ValueNotBetweenException::class);
-        $charsOverflow = Sms::SEGMENT_SIZE * Sms::MAX_SEGMENT_COUNT + fake()->randomDigit();
+        $charsOverflow = Sms::SEGMENT_SIZE * Sms::MAX_SEGMENT_COUNT + fake()->randomDigitNotZero();
 
         new Sms(fake()->word(),
                 fake()->phoneNumber(),
-                fake()->realTextBetween($charsOverflow, $charsOverflow * fake()->randomDigit()));
+                fake()->realTextBetween($charsOverflow, $charsOverflow * fake()->randomDigitNotZero()));
     }
 
     public static function fakeText(): string
